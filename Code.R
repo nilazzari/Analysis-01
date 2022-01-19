@@ -1,5 +1,3 @@
-# REPORT STATISTICA MEDICA------------------------------------------------------
-# muscle1.dat
 # UPLOAD E ATTACHMENT-----------------------------------------------------------
 dati = read.table("dati_muscl.txt", header = TRUE)
 attach(dati)
@@ -8,7 +6,6 @@ head(dati)
 dati
 
 # ANALISI UNIVARIATE------------------------------------------------------------
-# STATISTICHE DI SINTESI--------------------------------------------------------
 # bm (BODY MASS) quantità di massa corporea espressa (kg)
 summary(bm)
 sd(bm)
@@ -112,8 +109,7 @@ lillie.test(bm)
 lillie.test(wl)
 lillie.test(ho)
 
-#-------------------------------------------------------------------------------
-# TRASFORMAZIONI QUADRATICHE DELLE VARIABILI
+# TRASFORMAZIONI QUADRATICHE DELLE VARIABILI------------------------------------
 shapiro.test(bm)
 shapiro.test(bm^2)
 shapiro.test(wl)
@@ -248,13 +244,13 @@ ggplot(dati,
               color = "red",
               size = 0.8)
 
-# AIC e BIC MODELLI
+# AIC e BIC MODELLI-------------------------------------------------------------
 AIC(modello1)
 AIC(nl_fit)
 BIC(modello1)
 BIC(nl_fit)
 
-#ADDITIONAL GRAPHS (MODELLI)
+#ADDITIONAL GRAPHS (MODELLI)----------------------------------------------------
 # grafico 3d lineare
 # x, y, z variables
 x <- bm 
@@ -279,11 +275,11 @@ scatter3D(x, y, z, pch = 16, cex = 0.5, colvar=FALSE,
           surf = list(x = x.pred, y = y.pred, z = z.pred,  
                       facets = NA,col ="red",fit = fitpoints ),main = " ")
 
-# PUNTI ANOMALI
+# PUNTI ANOMALI----------------------------------------------------------------
 library(car)
 outlierTest(modello1)
 
-# PUNTI LEVA
+# PUNTI LEVA-------------------------------------------------------------------
 hat.plot <- function(fit) {
   p <- length(coefficients(fit))
   n <- length(fitted(fit))
@@ -293,7 +289,7 @@ hat.plot <- function(fit) {
 }
 hat.plot(modello1)
 
-# PUNTI INFLUENTI
+# PUNTI INFLUENTI--------------------------------------------------------------
 cutoff <- 4/(nrow(dati)-length(modello1$coefficients)-2)
 plot(modello1, which=4, cook.levels=cutoff)
 abline(h=cutoff, lty=2, col="red")
@@ -301,17 +297,13 @@ abline(h=cutoff, lty=2, col="red")
 influencePlot(modello1, id.method="identify", main="Influence Plot",
               sub="Circle size is proportional to Cook’s distance")
 
-################################################################################
-################################################################################
-################################################################################
-################################################################################
-
-# MODELLO DI REGRESSIONE LINEARE (OSSERVAZIONE 3 ESCLUSA)
+# MODELLO DI REGRESSIONE LINEARE (OSSERVAZIONE 3 ESCLUSA)----------------------
 dati_no3 = read.table("dati_no_oss3.txt", header = TRUE)
 modello_no3 = lm(ho ~ bm+wl, data = dati_no3)
 summary(modello_no3)
 confint(modello_no3)
 vif(modello_no3)
+
 # STIME STANDARDIZZATE C.BETA---------------------------------------------------
 install.packages("QuantPsyc")
 library(QuantPsyc)
@@ -337,7 +329,6 @@ qqnorm(res,main = "Residui del modello")
 qqline(res, col="red")
 shapiro.test(res)
 
-
 #RES.V.VAL.ST. E VALORI STIMATI VS VALORI OSSERVATI (OMOSCHEDASTICITA')---------
 ysti = fitted(modello1)
 ggplot(dati, aes(x = ysti, y = res)) +
@@ -354,5 +345,3 @@ ggplot(dati,
               slope = 1,
               color = "red",
               size = 0.8)
-
-
